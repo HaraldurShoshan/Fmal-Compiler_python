@@ -4,7 +4,7 @@ import sys
 
 def main():
     myLexer = Lexer()
-    myParser = Parser(myLexer)
-    myParser.parse()
+    #myParser = Parser(myLexer)
+    #myParser.parse()
 
 print(main())

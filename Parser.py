@@ -4,7 +4,7 @@ import re
 class Parser(object):
     def __init__(self, myLexer):
         self.Lexer = myLexer
-        self.nextT = self.Lexer.nextToken()
+        self.nextT = ""
         
     def intCheck(self, tokens):
         if(re.search("[0-9]+", tokens)):
@@ -18,25 +18,37 @@ class Parser(object):
         else:
             return False
 
+    def parse(self):    
+        self.statements()
+    
     def statements(self):
-        #nextT = self.Lexer.nextToken()
+        self.statement()
+        if(self.nextT == self.Lexer.TokenCode.ADD or self.nextT == self.Lexer.TokenCode.SUB):
+            self.nextT = self.Lexer.nextToken()
+            self.statement()
+        else:
+            self.error()
+
+    def statement(self):
+        self.nextT = self.Lexer.nextToken()
+        return self.nextT
+    
+    def error(self):
+        print('Syntax error')
         
-        statement()
-
-        if(nextT == self.Lexer.TokenCode.SEMICOL):
-            expr()
-
-        statement()
-
-    def statement():
         
-    def expr():
-
-    def term():
-
-    def factor:    
         
+        '''self.nextT = self.Lexer.nextToken
+        if(self.nextT == self.Lexer.TokenCode.):
+            statements()'''
 
+'''    def expr(self):
+
+    def term(self):
+        
+    def factor(self): '''   
+        
+ 
     
     
             

@@ -1,4 +1,5 @@
 import re
+import enum
 
 class TokenCode(object):
     ASSIGN = '='
@@ -9,9 +10,6 @@ class TokenCode(object):
     LPAREN = '('
     RPAREN = ')'
     END = 'end'
-    #INT = '2'
-    #INT = [0-9]+
-    #ID = [A-Za-z]+
 
 class Token(object):
     lexeme = ""
