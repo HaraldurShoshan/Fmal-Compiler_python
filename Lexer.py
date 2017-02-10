@@ -1,27 +1,48 @@
-from Token import Token
+from Token import *
+
 import sys
+import re
 
 class Lexer(object):
     def __init__(self):
-        self.TokenCode = Token.tCode
         file = open(sys.argv[1], 'r')
         self.code = file.read()
         self.codeList = []
-        self.splitCode()
         self.pos = -1;
 
-    def nextToken(self):
-        
-        if(re.search("[A-Za-z]+", self.codeList[pos])):
-            return Token(self.codeList[pos], ID)
-        elif(re.search)
+        self.splitCode()
 
-        if(self.codeList[pos] == '='):
-            token = Token(self.codeList[pos], 'ASSIGN')
-            return token 
-        token = Token(self.codeList[pos], )
+    def nextToken(self):
         self.pos = self.pos + 1
-        return self.codeList[self.pos]
+        
+        if(re.search("[A-Za-z]+", self.codeList[self.pos])):
+            return Token(self.codeList[self.pos], TokenCode.ID)
+        elif(re.search("[0-9]+", self.codeList[self.pos])):
+            return Token(self.codeList[self.pos], TokenCode.INT)
+        elif self.codeList[self.pos] == '(':
+            return Token(self.codeList[self.pos], TokenCode.LPAREN)
+        elif self.codeList[self.pos] == ')':
+            return Token(self.codeList[self.pos], TokenCode.RPAREN)
+        elif self.codeList[self.pos] == '*':
+            return Token(self.codeList[self.pos], TokenCode.MULT)
+        elif self.codeList[self.pos] == '-':
+            return Token(self.codeList[self.pos], TokenCode.SUB)
+        elif self.codeList[self.pos] == '+':
+            return Token(self.codeList[self.pos], TokenCode.ADD)
+        elif self.codeList[self.pos] == 'print':
+            return Token(self.codeList[self.pos], TokenCode.PRINT)
+        elif self.codeList[self.pos] == 'end':
+            return Token(self.codeList[self.pos], TokenCode.END)
+        elif self.codeList[self.pos] == 'error':
+            return Token(self.codeList[self.pos], TokdenCode.ERROR)
+        elif self.codeList[self.pos] == ';':
+            return Token(self.codeList[self.pos], TokenCode.SEMICOL)
+        elif self.codeList[self.pos] == '=':
+            return Token(self.codeList[self.pos], TokenCode.ASSIGN)
+        
+        
+
+   
 
     def printToken(self, token):
         print(token)
@@ -30,15 +51,3 @@ class Lexer(object):
         self.code = self.code.replace('\n', ' ').replace(';', ' ; ').replace('(', ' ( ').replace(')', ' ) ').replace('+', ' + ').replace('-', ' - ').replace('*', ' * ').replace('=', ' = ').replace('end', ' end')
         self.code = ' '.join(self.code.split())
         self.codeList = self.code.split()
-
-    def intCheck(self, tokens):
-        if(re.search("[0-9]+", tokens)):
-            return True
-        else:
-            return False
-
-    def idCheck(self, tokens):
-        if(re.search("[A-Za-z]+", tokens)):
-            return True
-        else:
-            return False

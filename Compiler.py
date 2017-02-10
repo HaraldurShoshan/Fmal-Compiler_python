@@ -6,5 +6,6 @@ def main():
     myLexer = Lexer()
     myParser = Parser(myLexer)
     myParser.parse()
+    myParser.pri()
 
 print(main())
