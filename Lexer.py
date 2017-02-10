@@ -1,6 +1,13 @@
+from Token import Token
+import sys
+
 class Lexer(object):
+    def __init__(self):
+        self.TokenCode = Token.tCode
 
     def nextToken(self):
-        print('nextToken')
-    def nextass(self):
-        print('asshole')
+        s = input()
+        return s
+
+    def tokenIs(self):
+        return self.tokenIs

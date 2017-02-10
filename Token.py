@@ -1,3 +1,4 @@
+import re
 
 class TokenCode(object):
     ASSIGN = '='
@@ -7,7 +8,10 @@ class TokenCode(object):
     MULT = '*'
     LPAREN = '('
     RPAREN = ')'
-    INT = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    END = 'end'
+    #INT = '2'
+    #INT = [0-9]+
+    #ID = [A-Za-z]+
 
 class Token(object):
     lexeme = ""
