@@ -1,136 +1,80 @@
 import sys
-import re
 from pprint import pprint
 
 class Interpreter():
     def __init__(self):
-        # file = open(sys.argv[1], 'r')
-        file = sys.stdin
+        file = open(sys.argv[1], 'r')
+        # file = sys.stdin
         self.code = file.read().split()
         self.stackList = self.code
-        self.pos = 0
         self.dict = {}
         self.stack = []
         self.initialize()
+    
+    def error(self):
+        raise exception("Error")
         
     def initialize(self):
         for index, item in enumerate(self.stackList):
             if(item == 'PUSH'):
-                
                 elem = self.stackList[index+1]
+                self.stackList.pop(index+1)
                 self.stack.append(elem)
-                #print('Push...' + elem)
             elif(item == 'ASSIGN'):
-                firstValue = self.stack.pop()
-                secondValue = self.stack.pop()
-                #print('assign: ' + secondValue +"="+firstValue)
-                self.dict[secondValue] = firstValue
+                first = self.stack.pop()
+                second = self.stack.pop()
+
+                self.dict[second] = first
             elif(item == 'ADD'):
-                #pprint(self.stack)
-                firstValue = self.stack.pop()
-                secondValue = self.stack.pop()
-                newS = ""
-                newF = ""
+                first = self.stack.pop()
+                second = self.stack.pop()
 
-                if '-' in firstValue:
-                    firstValue = firstValue.replace('-',"")
-                if '-' in secondValue:
-                    secondValue = secondValue.replace('-',"")
+                first = self.getValue(first)
+                second = self.getValue(second)
 
-                if(self.isDigit(firstValue) == False):
-                    for key, value in self.dict.items():
-                        if key == firstValue:
-                            newF = value
-                else:
-                    newF = firstValue
-                
-                if(self.isDigit(secondValue) == False):
-                    for key, value in self.dict.items():
-                        if key == secondValue:
-                            newS = value
-                else:
-                    newS = secondValue
-                
-                newValue = newF + "+" + newS
-                #print(newValue)
-                self.stack.append(str(eval(newValue)))
-                
+                self.stack.append(str(second+first))
             elif(item == 'SUB'):
-                #pprint(self.stack)
-                firstValue = self.stack.pop()
-                secondValue = self.stack.pop()
-                newS = ""
-                newF = ""
+                first = self.stack.pop()
+                second = self.stack.pop()
 
-                if '-' in firstValue:
-                    firstValue = firstValue.replace('-',"")
-                if '-' in secondValue:
-                    secondValue = secondValue.replace('-',"")
+                first = self.getValue(first)
+                second = self.getValue(second)
 
-                if(self.isDigit(firstValue) == False):
-                    for key, value in self.dict.items():
-                        if key == firstValue:
-                            newF = value
-                else:
-                    newF = firstValue
-                
-                if(self.isDigit(secondValue) == False):
-                    for key, value in self.dict.items():
-                        if key == secondValue:
-                            newS = value
-                else:
-                    newS = secondValue
-                
-                newValue = newF + "-" + newS
-                #print(newValue)
-                self.stack.append(str(eval(newValue)))
+                self.stack.append(str(second-first))
             elif(item == 'MULT'):
-                #pprint(self.stack)
-                firstValue = self.stack.pop()
-                secondValue = self.stack.pop()
-                newS = ""
-                newF = ""
+                first = self.stack.pop()
+                second = self.stack.pop()
 
-                if '-' in firstValue:
-                    firstValue = firstValue.replace('-',"")
-                if '-' in secondValue:
-                    secondValue = secondValue.replace('-',"")
+                first = self.getValue(first)
+                second = self.getValue(second)
 
-                if(self.isDigit(firstValue) == False):
-                    for key, value in self.dict.items():
-                        if key == firstValue:
-                            newF = value
-                else:
-                    
-                    newF = firstValue
-                
-                if(self.isDigit(secondValue) == False):
-                    for key, value in self.dict.items():
-                        if key == secondValue:
-                            newS = value
-                else:
-                    newS = secondValue
-
-                newValue = newF + "*" + newS
-                # print(newValue)
-                self.stack.append(str(eval(newValue)))
-                #pprint(self.stack)
+                self.stack.append(str(second*first))
             elif(item == 'PRINT'):
-                # pprint(self.stack)
                 elem = self.stack[-1]
                 for key, value in self.dict.items():
                     if key == elem:
                         print(value)
+            else:
+                print('Error for operator: ' + item)
+                self.error()
             
-                
-            
-            
-            
+    def findValue(self,s):
+        for key, value in self.dict.items():
+            if key == s:
+                return value
+
+    def getValue(self, s):
+        if(self.isDigit(s)):
+            s = int(s)
+        else:
+            s = int(self.findValue(s))
         
+        return s
         
-        
-    def isDigit(self,elem):
-        return elem.isdigit()
+    def isDigit(self,s):
+        if s[0] in ('-', '+'):
+            return s[1:].isdigit()
+        return s.isdigit()
 
 Interpreter()   
 
