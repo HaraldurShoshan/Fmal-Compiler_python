@@ -14,29 +14,25 @@ class Parser(object):
         
     def statements(self):
         if(self.nextT.tCode == TokenCode.END):
-            print("FINISHED")
+            pass
         self.statement()
         if(self.nextT.tCode == TokenCode.SEMICOL):
              self.nextT = self.lex()
-             self.statements()
-        else:
-            print("Syntax Error")
+             self.statements()             
 
     def statement(self):
-        if(self.nextT.tCode == TokenCode.ID):
-            self.opList.append("PUSH " + self.nextT.lexeme)
+        if(self.nextT.tCode == TokenCode.ID ):
+            print("PUSH " + self.nextT.lexeme)
             self.nextT = self.lex()
             if(self.nextT.tCode == TokenCode.ASSIGN):
                 self.nextT = self.lex()                                
-                self.expr()
-                self.opList.append("ASSIGN")
+                self.expr()  
+                print("ASSIGN")                                
         elif(self.nextT.tCode == TokenCode.PRINT):
             self.nextT = self.lex()
-            self.opList.append("PUSH" + self.nextT.lexeme)
-            self.opList.append("PRINT")
+            print("PUSH " + self.nextT.lexeme)
+            print("PRINT")
             self.nextT = self.lex()
-        else:
-            print("Syntax Error")
             
     def expr(self):
         self.term()
@@ -44,14 +40,14 @@ class Parser(object):
             self.nextT = self.lex()
             if(self.nextT.tCode == TokenCode.ID or self.nextT.tCode == TokenCode.INT or self.nextT.tCode == TokenCode.LPAREN):
                 self.expr()
-                self.opList.append('ADD')
+                print("ADD")
             else:
                 print("Syntax Error")
         elif(self.nextT.tCode == TokenCode.SUB):
             self.nextT = self.lex()
             if(self.nextT.tCode == TokenCode.ID or self.nextT.tCode == TokenCode.INT or self.nextT.tCode == TokenCode.LPAREN):
                 self.expr()
-                self.opList.append('SUB')
+                print("SUB")
             else:
                 print("Syntax Error")
     
@@ -62,16 +58,15 @@ class Parser(object):
             self.nextT = self.lex()
             if(self.nextT.tCode == TokenCode.ID or self.nextT.tCode == TokenCode.INT or self.nextT.tCode == TokenCode.LPAREN):
                 self.term()
-                self.opList.append('MULT')
+                print("MULT")
             else:
                 print("Syntax error")
 
     def factor(self):
-        
         if(self.nextT.tCode == TokenCode.INT):
-            self.opList.append("PUSH " + self.nextT.lexeme)
+            print("PUSH " + self.nextT.lexeme)
         elif(self.nextT.tCode == TokenCode.ID):
-            self.opList.append("PUSH " + self.nextT.lexeme)
+            print("PUSH " + self.nextT.lexeme)
         elif(self.nextT.tCode == TokenCode.LPAREN):
             self.nextT = self.lex()
             self.expr()
@@ -82,7 +77,3 @@ class Parser(object):
                
     def lex(self):
         return self.Lexer.nextToken()
-
-    def pri(self):
-        for i in self.opList:
-            print(i)    
