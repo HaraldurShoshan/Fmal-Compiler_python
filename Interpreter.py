@@ -4,8 +4,8 @@ from pprint import pprint
 
 class Interpreter():
     def __init__(self):
-        file = open(sys.argv[1], 'r')
-        #file = sys.stdin
+        # file = open(sys.argv[1], 'r')
+        file = sys.stdin
         self.code = file.read().split()
         self.stackList = self.code
         self.pos = 0
@@ -13,22 +13,29 @@ class Interpreter():
         self.stack = []
         self.initialize()
         
-        #pprint(self.stackList)
-
     def initialize(self):
         for index, item in enumerate(self.stackList):
             if(item == 'PUSH'):
+                
                 elem = self.stackList[index+1]
                 self.stack.append(elem)
+                #print('Push...' + elem)
             elif(item == 'ASSIGN'):
                 firstValue = self.stack.pop()
                 secondValue = self.stack.pop()
+                #print('assign: ' + secondValue +"="+firstValue)
                 self.dict[secondValue] = firstValue
             elif(item == 'ADD'):
+                #pprint(self.stack)
                 firstValue = self.stack.pop()
                 secondValue = self.stack.pop()
-                newS = 0
-                newF = 0
+                newS = ""
+                newF = ""
+
+                if '-' in firstValue:
+                    firstValue = firstValue.replace('-',"")
+                if '-' in secondValue:
+                    secondValue = secondValue.replace('-',"")
 
                 if(self.isDigit(firstValue) == False):
                     for key, value in self.dict.items():
@@ -40,59 +47,81 @@ class Interpreter():
                 if(self.isDigit(secondValue) == False):
                     for key, value in self.dict.items():
                         if key == secondValue:
-                            newF = value
+                            newS = value
                 else:
                     newS = secondValue
                 
-                newValue = int(newS) + int(newF)
-                self.stack.append(newValue)
+                newValue = newF + "+" + newS
+                #print(newValue)
+                self.stack.append(str(eval(newValue)))
                 
             elif(item == 'SUB'):
+                #pprint(self.stack)
                 firstValue = self.stack.pop()
                 secondValue = self.stack.pop()
-                newS = 0
-                newF = 0
+                newS = ""
+                newF = ""
+
+                if '-' in firstValue:
+                    firstValue = firstValue.replace('-',"")
+                if '-' in secondValue:
+                    secondValue = secondValue.replace('-',"")
 
                 if(self.isDigit(firstValue) == False):
                     for key, value in self.dict.items():
                         if key == firstValue:
-                            newF = int(value)
+                            newF = value
                 else:
-                    newF = int(firstValue)
+                    newF = firstValue
                 
                 if(self.isDigit(secondValue) == False):
                     for key, value in self.dict.items():
                         if key == secondValue:
-                            newF = int(value)
+                            newS = value
                 else:
-                    newS = int(secondValue)
+                    newS = secondValue
                 
-                newValue = newS - newF
-                self.stack.append(newValue)
+                newValue = newF + "-" + newS
+                #print(newValue)
+                self.stack.append(str(eval(newValue)))
             elif(item == 'MULT'):
+                #pprint(self.stack)
                 firstValue = self.stack.pop()
                 secondValue = self.stack.pop()
-                newS = 0
-                newF = 0
+                newS = ""
+                newF = ""
+
+                if '-' in firstValue:
+                    firstValue = firstValue.replace('-',"")
+                if '-' in secondValue:
+                    secondValue = secondValue.replace('-',"")
 
                 if(self.isDigit(firstValue) == False):
                     for key, value in self.dict.items():
                         if key == firstValue:
-                            newF = int(value)
+                            newF = value
                 else:
-                    newF = int(firstValue)
+                    
+                    newF = firstValue
                 
                 if(self.isDigit(secondValue) == False):
                     for key, value in self.dict.items():
                         if key == secondValue:
-                            newF = int(value)
+                            newS = value
                 else:
-                    newS = int(secondValue)
-                
-                newValue = newS * newF
-                self.stack.append(newValue)
+                    newS = secondValue
+
+                newValue = newF + "*" + newS
+                # print(newValue)
+                self.stack.append(str(eval(newValue)))
+                #pprint(self.stack)
             elif(item == 'PRINT'):
-                print(self.stack(-1))
+                # pprint(self.stack)
+                elem = self.stack[-1]
+                for key, value in self.dict.items():
+                    if key == elem:
+                        print(value)
+            
                 
             
             
@@ -101,18 +130,7 @@ class Interpreter():
         
         
     def isDigit(self,elem):
-        # if(re.search("[0-9]+", elem)):
-        #     return True
-        # else:
-        #     return False
         return elem.isdigit()
-
-    def add(self):
-        pass
-    def sub(self):
-        pass    
-    def mult(self):
-        pass
 
 Interpreter()   
 
